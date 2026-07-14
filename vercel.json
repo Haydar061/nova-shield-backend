@@ -1,15 +1,19 @@
 {
   "version": 2,
+  "buildCommand": "npm run build",
   "builds": [
     {
-      "src": "src/app.ts",
-      "use": "@vercel/node"
+      "src": "dist/bundle.js",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": ["node_modules/.prisma/**", "node_modules/@prisma/client/**"]
+      }
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "src/app.ts"
+      "dest": "dist/bundle.js"
     }
   ]
 }

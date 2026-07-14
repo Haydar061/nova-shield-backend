@@ -4,8 +4,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node src/app.ts",
-    "build": "tsc",
-    "start": "node dist/app.js",
+    "build": "npx prisma generate && npx esbuild src/app.ts --bundle --platform=node --format=cjs --target=node18 --outfile=dist/bundle.js --external:@prisma/client --external:.prisma",
+    "start": "node dist/bundle.js",
     "test": "jest --runInBand --forceExit"
   },
   "jest": {
@@ -44,6 +44,7 @@
   "devDependencies": {
     "@types/jest": "^29.5.14",
     "@types/supertest": "^7.2.1",
+    "esbuild": "^0.28.1",
     "jest": "^29.7.0",
     "supertest": "^7.2.2",
     "ts-jest": "^29.4.11",
