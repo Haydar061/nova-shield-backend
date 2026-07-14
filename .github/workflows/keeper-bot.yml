@@ -9,10 +9,13 @@ jobs:
   run-keeper:
     runs-on: ubuntu-latest
     steps:
-      - name: Keeper Bot — Stop-loss / Take-profit kontrol
+      - name: Keeper Bot — 10 saniyede bir, 5 dakika boyunca
         run: |
-          curl -s -X POST \
-            "https://nova-shield-backend.vercel.app/api/cron/keeper" \
-            -H "Authorization: Bearer ${{ secrets.WEBHOOK_SECRET }}" \
-            -H "Content-Type: application/json" \
-            --max-time 30
+          for i in $(seq 1 30); do
+            curl -s -X POST \
+              "https://nova-shield-backend.vercel.app/api/cron/keeper" \
+              -H "Authorization: Bearer ${{ secrets.WEBHOOK_SECRET }}" \
+              -H "Content-Type: application/json" \
+              --max-time 8
+            sleep 10
+          done
