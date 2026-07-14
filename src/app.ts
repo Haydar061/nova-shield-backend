@@ -10,6 +10,7 @@ import { config } from "./utils/config";
 import { rateLimiter } from "./middleware/security";
 import { registerWsClient } from "./services/smartmoney.service";
 import { startKeeperBot } from "./services/keeper.service";
+import { registerHeliusWebhook } from "./services/smartmoney.service";
 
 import pretradeRoute  from "./routes/pretrade.route";
 import mevRoute       from "./routes/mev.route";
@@ -18,6 +19,8 @@ import smartmoneyRoute from "./routes/smartmoney.route";
 import ordersRoute    from "./routes/orders.route";
 import copytradeRoute from "./routes/copytrade.route";
 import jitoRoute      from "./routes/jito.route";
+import statsRoute     from "./routes/stats.route";
+import cronRoute      from "./routes/cron.route";
 
 const app = express();
 const server = http.createServer(app);
@@ -40,6 +43,8 @@ app.use("/api/smart-money",     smartmoneyRoute);
 app.use("/api/orders",          ordersRoute);
 app.use("/api/copy-trade",      copytradeRoute);
 app.use("/api/jito",            jitoRoute);
+app.use("/api/stats",           statsRoute);
+app.use("/api/cron",            cronRoute);
 
 // ── 404 Handler ────────────────────────────────────────────────────────────────
 app.use((_req, res) => {
@@ -65,6 +70,9 @@ if (!process.env.VERCEL) {
     logger.info(`NovaShield Backend çalışıyor → http://localhost:${config.port}`);
     logger.info(`WebSocket → ws://localhost:${config.port}/api/smart-money/subscribe`);
     startKeeperBot();
+    // Helius webhook kaydet (arka planda, hata olsa da devam et)
+    const backendUrl = process.env.BACKEND_URL || `http://localhost:${config.port}`;
+    registerHeliusWebhook(backendUrl).catch(() => {});
   });
 }
 

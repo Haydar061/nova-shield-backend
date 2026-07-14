@@ -18,3 +18,7 @@
 2026-07-14 16:35:43 [[32minfo[39m] NovaShield Backend çalışıyor → http://localhost:4000
 2026-07-14 16:35:43 [[32minfo[39m] WebSocket → ws://localhost:4000/api/smart-money/subscribe
 2026-07-14 16:35:43 [[32minfo[39m] Keeper bot başlatıldı (10s interval)
+2026-07-14 17:28:57 [[32minfo[39m] WebSocket client bağlandı
+2026-07-14 17:28:59 [[32minfo[39m] WebSocket client bağlandı
+2026-07-14 17:29:01 [[32minfo[39m] WebSocket client bağlandı
+2026-07-14 17:29:04 [[32minfo[39m] WebSocket client bağlandı
