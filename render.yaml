@@ -1,0 +1,37 @@
+services:
+  - type: web
+    name: nova-shield-backend
+    env: node
+    plan: free
+    buildCommand: npm install && npx prisma generate && npm run build
+    startCommand: npx prisma migrate deploy && npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "4000"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: nova-shield-db
+          property: connectionString
+      - key: HELIUS_API_KEY
+        value: 6a2d89bc-5ab8-4f75-b071-60d1e7ec3410
+      - key: HELIUS_RPC_URL
+        value: https://mainnet.helius-rpc.com/?api-key=6a2d89bc-5ab8-4f75-b071-60d1e7ec3410
+      - key: JITO_BLOCK_ENGINE_URL
+        value: https://mainnet.block-engine.jito.wtf
+      - key: JITO_TIP_LAMPORTS
+        value: "10000"
+      - key: RUGCHECK_BASE_URL
+        value: https://api.rugcheck.xyz/v1
+      - key: WEBHOOK_SECRET
+        generateValue: true
+      - key: PROGRAM_ID
+        value: 6CdRoF6ZbJHRuniuTYqvVrBHfqwgT1BbKxWtnrUHNqta
+      - key: NOVA_MINT
+        value: 6wmmgpsUyZASWwQJUk1m4rC5VWUXsbRPCno4G8g6sxjH
+
+databases:
+  - name: nova-shield-db
+    plan: free
