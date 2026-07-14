@@ -1,0 +1,18 @@
+name: Keeper Bot
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"   # Her 5 dakikada bir çalışır
+  workflow_dispatch:          # Manuel tetikleme de mümkün
+
+jobs:
+  run-keeper:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Keeper Bot — Stop-loss / Take-profit kontrol
+        run: |
+          curl -s -X POST \
+            "https://nova-shield-backend.vercel.app/api/cron/keeper" \
+            -H "Authorization: Bearer ${{ secrets.WEBHOOK_SECRET }}" \
+            -H "Content-Type: application/json" \
+            --max-time 30
