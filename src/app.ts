@@ -52,19 +52,20 @@ app.use((err: any, _req: express.Request, res: express.Response, _next: express.
   res.status(500).json({ error: "Sunucu hatası" });
 });
 
-// ── WebSocket (Smart Money anlık bildirimleri) ─────────────────────────────────
-const wss = new WebSocketServer({ server, path: "/api/smart-money/subscribe" });
-wss.on("connection", (ws: WebSocket) => {
-  logger.info("WebSocket client bağlandı");
-  registerWsClient(ws);
-  ws.send(JSON.stringify({ type: "connected", message: "NovaShield smart money stream" }));
-});
+// ── WebSocket + Sunucu (sadece Vercel dışında) ────────────────────────────────
+if (!process.env.VERCEL) {
+  const wss = new WebSocketServer({ server, path: "/api/smart-money/subscribe" });
+  wss.on("connection", (ws: WebSocket) => {
+    logger.info("WebSocket client bağlandı");
+    registerWsClient(ws);
+    ws.send(JSON.stringify({ type: "connected", message: "NovaShield smart money stream" }));
+  });
 
-// ── Sunucu Başlat ──────────────────────────────────────────────────────────────
-server.listen(config.port, () => {
-  logger.info(`NovaShield Backend çalışıyor → http://localhost:${config.port}`);
-  logger.info(`WebSocket → ws://localhost:${config.port}/api/smart-money/subscribe`);
-  startKeeperBot();
-});
+  server.listen(config.port, () => {
+    logger.info(`NovaShield Backend çalışıyor → http://localhost:${config.port}`);
+    logger.info(`WebSocket → ws://localhost:${config.port}/api/smart-money/subscribe`);
+    startKeeperBot();
+  });
+}
 
 export default app;
