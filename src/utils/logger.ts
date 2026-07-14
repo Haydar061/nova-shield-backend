@@ -1,5 +1,15 @@
 import winston from "winston";
 
+const transports: winston.transport[] = [new winston.transports.Console()];
+
+// Vercel serverless'ta filesystem read-only — sadece console kullan
+if (!process.env.VERCEL) {
+  transports.push(
+    new winston.transports.File({ filename: "logs/error.log", level: "error" }),
+    new winston.transports.File({ filename: "logs/app.log" })
+  );
+}
+
 export const logger = winston.createLogger({
   level: process.env.NODE_ENV === "production" ? "info" : "debug",
   format: winston.format.combine(
@@ -10,9 +20,5 @@ export const logger = winston.createLogger({
       return `${timestamp} [${level}] ${message}${extras}`;
     })
   ),
-  transports: [
-    new winston.transports.Console(),
-    new winston.transports.File({ filename: "logs/error.log", level: "error" }),
-    new winston.transports.File({ filename: "logs/app.log" }),
-  ],
+  transports,
 });
