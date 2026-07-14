@@ -16,10 +16,12 @@
       "dest": "dist/bundle.js"
     }
   ],
-  "crons": [
+  "headers": [
     {
-      "path": "/api/cron/keeper",
-      "schedule": "0 * * * *"
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" }
+      ]
     }
   ]
 }
